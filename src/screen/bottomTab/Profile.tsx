@@ -1,7 +1,9 @@
 
     import React from 'react';
-    import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+    import { View, Text, StyleSheet, FlatList, TouchableOpacity, ScrollView } from 'react-native';
 import RightIcon from '../../assets/svg/Right.svg'; // Assuming you have an SVG or image for the right arrow icon
+import { useNavigation } from '@react-navigation/native';
+import ScreenNameEnum from '../../routes/screenName.enum';
     
     const options = [
       { id: '1', title: 'Biography' },
@@ -14,16 +16,25 @@ import RightIcon from '../../assets/svg/Right.svg'; // Assuming you have an SVG 
       { id: '8', title: 'Subscription' },
       { id: '9', title: 'General conditions of use' },
       { id: '10', title: 'Setting' },
+      { id: '11', title: 'Log Out' },
     ];
     
     const Profile = () => {
+      const navigation = useNavigation()
       return (
         <View style={styles.container}>
           <Text style={styles.headerText}>Profile</Text>
+          <ScrollView showsVerticalScrollIndicator={false}>
           <FlatList
             data={options}
             renderItem={({ item }) => (
-              <TouchableOpacity style={styles.optionItem}>
+              <TouchableOpacity
+              onPress={()=>{
+                if(item.title == 'Log Out'){
+                  navigation.navigate(ScreenNameEnum.SIGNUP_METHOD)
+                }
+              }}
+              style={styles.optionItem}>
                 <Text style={styles.optionText}>{item.title}</Text>
                 <RightIcon height={35} /> 
               </TouchableOpacity>
@@ -31,6 +42,9 @@ import RightIcon from '../../assets/svg/Right.svg'; // Assuming you have an SVG 
             keyExtractor={item => item.id}
             showsVerticalScrollIndicator={false}
           />
+
+          <View   style={{height:60}}/>
+          </ScrollView>
         </View>
       );
     };

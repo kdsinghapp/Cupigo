@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "438738743028",
+    "project_id": "cupigo",
+    "storage_bucket": "cupigo.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:438738743028:android:d9797363b030fc7b1cb8a1",
+        "android_client_info": {
+          "package_name": "com.cupigo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARKsgV7oB8ybGj_aTVaa8sKEpFgo8uHVo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

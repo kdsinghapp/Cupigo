@@ -7,7 +7,7 @@
   import { TextInput } from 'react-native-gesture-handler';
   import LinearGradient from 'react-native-linear-gradient';
   import PhoneSvg from '../../assets/svg/Phone.svg'; 
-  import { useNavigation } from '@react-navigation/native';
+  import { useNavigation, useRoute } from '@react-navigation/native';
   import { Screen } from 'react-native-screens';
   import ScreenNameEnum from '../../routes/screenName.enum';
   import {
@@ -16,20 +16,49 @@
     useBlurOnFulfill,
     useClearByFocusCell,
   } from 'react-native-confirmation-code-field';
+import { useDispatch, useSelector } from 'react-redux';
+import Loading from '../../configs/Loader';
+import { login_with_otp } from '../../redux/feature/authSlice';
+
+
   export default function OtpScreen() {
+    const route = useRoute()
+    const {mobile} = route.params
     const navigation = useNavigation()
     const [value, setValue] = useState('');
     const ref = useBlurOnFulfill({value, cellCount: 4});
+    const isLoading = useSelector(state => state.auth.isLoading);
+    const dispatch = useDispatch();
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
     value,
     setValue,
   });
-    return (
+
+  
+  const valid_otp = () => {
+    try{
+    const params = {
+      data: {
+        otp: value,
+        mobile: mobile,
+      },
+      navigation: navigation,
+    }
+    dispatch(login_with_otp(params))
+  }catch(err){
+    console.log(err);
+    
+  }
+  }
+  
+  return (
       <LinearGradient
       colors={['#BD0DF4', '#FA3EBA']}
       style={{flex:1}}
     >
+      {isLoading?<Loading />:null}
         <View style={styles.logoContainer}>
+
           <Image
             source={image.whiteLogo}
             style={styles.logo}
@@ -69,7 +98,7 @@
         </View>
           <TouchableOpacity
           onPress={()=>{
-            navigation.navigate(ScreenNameEnum.ASK_NAME)
+            valid_otp()
   
           }}
           style={styles.button}>

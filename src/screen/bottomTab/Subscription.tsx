@@ -1,34 +1,31 @@
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../../configs/Header';
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
-import { image } from '../../configs/utils/images';
+import { image} from '../../configs/utils/images'; // Import logos
 import Line from '../../assets/svg/line.svg';
 import LinearGradient from 'react-native-linear-gradient';
+import { useDispatch, useSelector } from 'react-redux';
+import { get_Plans } from '../../redux/feature/featuresSlice';
+import Loading from '../../configs/Loader';
+import { useIsFocused } from '@react-navigation/native';
 
-const subscriptions = [
-  {
-    logo: image.platinum,
-    price: '14.99€',
-    live: '50 EXTRA LIVES',
-    rose: '100 ROSES',
-  },
-  {
-    logo: image.gold,
-    price: '7.99€',
-    live: '20 EXTRA LIVES',
-    rose: '50 ROSES',
-  },
-  {
-    logo: image.silver,
-    price: '4.99€',
-    live: '5 EXTRA LIVES',
-    rose: '20 ROSES',
-  },
-];
+const getLogo = (title) => {
+  switch (title) {
+    case 'SILVER':
+      return image.silver;
+    case 'GOLD':
+      return image.gold;
+    case 'PLATINUM':
+      return image.platinum;
+    default:
+      return null;
+  }
+};
 
 export default function Subscription() {
   const [currentSubscription, setCurrentSubscription] = useState(0);
+  const dispatch = useDispatch();
 
   const handleLeftPress = () => {
     setCurrentSubscription((prev) => (prev > 0 ? prev - 1 : subscriptions.length - 1));
@@ -38,10 +35,30 @@ export default function Subscription() {
     setCurrentSubscription((prev) => (prev < subscriptions.length - 1 ? prev + 1 : 0));
   };
 
-  const { logo, price, live, rose } = subscriptions[currentSubscription];
+  const subscriptions = useSelector(state => state.feature.SubscriptionPlan);
+  const isLoading = useSelector(state => state.feature.isLoading);
+
+  const isFocuse = useIsFocused();
+
+  useEffect(() => {
+    get_subscription();
+  }, [isFocuse]);
+
+  const get_subscription = async () => {
+    await dispatch(get_Plans());
+  };
+
+  if (!subscriptions || subscriptions.length === 0) {
+    return null;
+  }
+
+  const { title, price, lives, roses, currency_symbole } = subscriptions[currentSubscription];
+  const logo = getLogo(title);
+console.log(logo);
 
   return (
     <View style={styles.container}>
+      {isLoading ? <Loading /> : null}
       <Header title='Subscription' />
       <View style={styles.contentContainer}>
         <View style={styles.imageContainer}>
@@ -51,15 +68,16 @@ export default function Subscription() {
             style={styles.image}
           />
           <View style={styles.subscriptionDetails}>
-            <Image source={logo} resizeMode='contain' style={styles.logo} />
+            {logo && <Image source={logo} resizeMode='contain' style={styles.logo} />}
+
             <View style={styles.lineContainer}>
               <Line />
             </View>
-            <Text style={styles.price}>{price}</Text>
-            <Text style={styles.live}>{live}</Text>
+            <Text style={styles.price}>{currency_symbole}{price}</Text>
+            <Text style={styles.live}>{lives} Lives</Text>
           </View>
           <View style={styles.roseContainer}>
-            <Text style={styles.roseText}>{rose}</Text>
+            <Text style={styles.roseText}>{roses} Roses</Text>
             <View style={styles.buttonsContainer}>
               <TouchableOpacity onPress={handleLeftPress}>
                 <Image source={image.left} style={styles.arrowButton} />
@@ -89,17 +107,16 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
-   
     alignItems: 'center',
   },
   imageContainer: {
     backgroundColor: '#fff',
-    marginTop:30,
+    marginTop: 30,
     height: hp(63),
     borderRadius: 20,
     width: wp(90),
     overflow: 'hidden',
-    position: 'relative', // Ensure positioning for the absolute image
+    position: 'relative',
   },
   image: {
     height: hp(37),
@@ -112,8 +129,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 20,
   },
+  title: {
+    fontSize: 20,
+    fontWeight: '900',
+    color: '#000',
+  },
   logo: {
     height: 20,
+    marginBottom: 10, // Adjust as necessary
   },
   lineContainer: {
     marginTop: 15,
@@ -136,14 +159,14 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: '900',
     color: '#BD0DF4',
-    marginTop:30
+    marginTop: 30,
   },
   buttonsContainer: {
     flexDirection: 'row',
     marginHorizontal: 10,
     alignItems: 'center',
     justifyContent: 'space-between',
-    width:'90%',
+    width: '90%',
     marginTop: 15,
   },
   arrowButton: {
@@ -170,6 +193,6 @@ const styles = StyleSheet.create({
     margin: 10,
     color: '#ffffff',
     backgroundColor: 'transparent',
-    fontWeight:'600'
+    fontWeight: '600',
   },
 });
