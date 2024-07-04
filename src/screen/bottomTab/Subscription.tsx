@@ -69,7 +69,8 @@ export default function Subscription() {
               </TouchableOpacity>
             </View>
             <Text style={styles.detailText}>CUSTOMIZABLE WALL</Text>
-            <Text style={styles.detailText}>LEAVE THE CHAT AT ANY TIME WITHOUT PENALTY</Text>
+            <Text style={styles.detailText}>LEAVE THE CHAT AT ANY TIME</Text>
+            <Text style={styles.detailText}>WITHOUT PENALTY</Text>
             <Text style={styles.detailText}>ADD MULTIPLE PHOTOS</Text>
           </View>
         </View>
@@ -88,12 +89,13 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     flex: 1,
-    justifyContent: 'center',
+   
     alignItems: 'center',
   },
   imageContainer: {
     backgroundColor: '#fff',
-    height: hp(60),
+    marginTop:30,
+    height: hp(63),
     borderRadius: 20,
     width: wp(90),
     overflow: 'hidden',
@@ -134,12 +136,14 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: '900',
     color: '#BD0DF4',
+    marginTop:30
   },
   buttonsContainer: {
     flexDirection: 'row',
     marginHorizontal: 10,
     alignItems: 'center',
     justifyContent: 'space-between',
+    width:'90%',
     marginTop: 15,
   },
   arrowButton: {
@@ -162,10 +166,10 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 18,
-    fontFamily: 'Gill Sans',
     textAlign: 'center',
     margin: 10,
     color: '#ffffff',
     backgroundColor: 'transparent',
+    fontWeight:'600'
   },
 });

@@ -29,6 +29,7 @@ enum ScreenNameEnum {
   CONDITIONS_OF_USE = 'CONDITIONS_OF_USE',
   SETTINGS = 'SETTINGS',
   SUBSCRIPTION = 'SUBSCRIPTION',
+  Chat_Contact='Chat_Contact'
 }
 
 export default ScreenNameEnum;

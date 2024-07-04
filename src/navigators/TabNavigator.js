@@ -57,7 +57,7 @@ export default function TabNavigator() {
         options={{
           tabBarIcon: ({ focused, color, size }) => (
             <Image
-              source={image.Profile}
+              source={image.}
               style={{
                 width: 24,
                 height: 24,

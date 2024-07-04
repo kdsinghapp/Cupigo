@@ -4,11 +4,19 @@ import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-nat
 import { colors } from '../../configs/utils/colors';
 import { image, mHeight, mWidth } from '../../configs/utils/utils';
 import { TextInput } from 'react-native-gesture-handler';
-// import PhoneSvg from '../../assets/svg/Phone.svg'; // Assuming Phone.svg is an SVG component
+import LinearGradient from 'react-native-linear-gradient';
+import PhoneSvg from '../../assets/svg/Phone.svg'; 
+import { useNavigation } from '@react-navigation/native';
+import { Screen } from 'react-native-screens';
+import ScreenNameEnum from '../../routes/screenName.enum';
 
 export default function Login() {
+  const navigation = useNavigation()
   return (
-    <View style={styles.container}>
+    <LinearGradient
+    colors={['#BD0DF4', '#FA3EBA']}
+    style={{flex:1}}
+  >
       <View style={styles.logoContainer}>
         <Image
           source={image.appLogo}
@@ -16,23 +24,29 @@ export default function Login() {
           resizeMode='contain'
         />
       </View>
-      <View style={styles.contentContainer}>
+      <LinearGradient
+    colors={['#BD0DF4', '#FA3EBA']}style={styles.contentContainer}>
         <View style={styles.greetingContainer}>
           <Text style={styles.greetingText}>Login With Phone,</Text>
         </View>
         <View style={styles.inputContainer}>
-          {/* <PhoneSvg width={24} height={24} /> Adjust width and height as per your SVG */}
+          <PhoneSvg width={24} height={24} /> 
           <TextInput
             placeholderTextColor={'#BD0DF4'}
             style={styles.input}
             placeholder='Enter Your Phone Number'
           />
         </View>
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity
+        onPress={()=>{
+          navigation.navigate(ScreenNameEnum.OTP_SCREEN)
+
+        }}
+        style={styles.button}>
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
-      </View>
-    </View>
+      </LinearGradient>
+    </LinearGradient>
   );
 }
 
@@ -55,9 +69,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginHorizontal: mWidth * 0.01,
-    borderRadius: mWidth * 0.02,
+    borderRadius: mWidth * 0.03,
     marginTop: mHeight * 0.20,
     backgroundColor: colors.cardColor,
+ 
+  
   },
   greetingContainer: {
     flexDirection: 'row',

@@ -22,16 +22,11 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
 const styles = StyleSheet.create({
   headerContainer: {
     width: '100%',
-    backgroundColor: '#fff', // Adjust as per your design
+   
     alignItems: 'center',
     justifyContent: 'center',
-    borderBottomWidth: 0.5,
-    borderBottomColor: '#d6d6d6',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 2,
-    elevation: 3,
+
+    
   },
   headerContent: {
     width: wp(100),

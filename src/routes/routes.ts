@@ -19,6 +19,7 @@ import OtpScreen from "../screen/auth/OtpScreen";
 import SignupMethod from "../screen/auth/SignupMethod";
 import Subscription from "../screen/bottomTab/Subscription";
 import chat from "../screen/bottomTab/chat/chat";
+import chatPage from "../screen/bottomTab/chat/chatPage";
 import Biography from "../screen/profilesection/Biography";
 import Distance from "../screen/profilesection/Distance";
 import GeneralCondions from "../screen/profilesection/GeneralCondions";
@@ -93,6 +94,7 @@ const _routes = {
       name: ScreenNameEnum.CHAT_SCREEN,
       Component:chat,
     },
+
     {
       name: ScreenNameEnum.BIOGRAPHY,
       Component:Biography,
