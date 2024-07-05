@@ -64,6 +64,7 @@ export default function Login() {
             placeholder='Enter Your Phone Number'
             value={phoneNumber}
             onChangeText={(txt)=>setPhoneNumber(txt)}
+            keyboardType='number-pad'
           />
         </View>
         <TouchableOpacity
@@ -147,7 +148,8 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     flex: 1,
     marginLeft: 5,
-    marginTop: 1
+    marginTop: 1,
+    width:'80%'
   },
   button: {
     backgroundColor: colors.btnColor,

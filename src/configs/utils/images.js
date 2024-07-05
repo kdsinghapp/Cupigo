@@ -32,6 +32,9 @@ export const image = {
    gallery: require('../../assets/croping/attach2x.png'),
    emoji: require('../../assets/croping/emoji2x.png'),
    Profile: require('../../assets/croping/Profile.png'),
+   find: require('../../assets/croping/Logo.png'),
+   radar: require('../../assets/croping/radar.png'),
+
 
 
 }

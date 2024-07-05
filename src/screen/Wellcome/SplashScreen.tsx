@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
 import { View, Image, StyleSheet, ImageSourcePropType } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import ScreenNameEnum from '../../routes/screenName.enum';
 import { image } from '../../configs/utils/images';
+import { useSelector } from 'react-redux';
 
 interface SplashScreenProps {
 
@@ -11,13 +12,28 @@ interface SplashScreenProps {
 const SplashScreen: React.FC<SplashScreenProps> = (props) => {
   const navigation = useNavigation();
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      navigation.navigate(ScreenNameEnum.SIGNUP_METHOD); 
-    }, 3000);
+  const isLogOut = useSelector((state) => state.auth.isLogOut);
+  const isLogin = useSelector((state) => state.auth.isLogin);
+  const isFoucs = useIsFocused();
 
-    return () => clearTimeout(timer); 
-  }, [navigation]);
+  const checkLogout = () => {
+    console.log('================checkLogout===========isLogOut=========', isLogOut);
+    console.log('================checkLogout===========isLogin=========', isLogin);
+    if (!isLogOut && !isLogin || isLogOut && !isLogin) {
+      console.log('================Login====================');
+      navigation.navigate(ScreenNameEnum.SIGNUP_METHOD);
+    }
+    if (!isLogOut && isLogin) {
+      console.log('================HomeTab====================');
+      navigation.navigate(ScreenNameEnum.BOTTOM_TAB);
+    }
+  }
+
+  useEffect(() => {
+    checkLogout();
+  }, [isFoucs, isLogOut]);
+
+
 
   return (
     <View style={styles.container}>

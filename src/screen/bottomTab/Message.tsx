@@ -1,80 +1,114 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image, TextInput, FlatList, TouchableOpacity } from 'react-native';
-import { image } from '../../configs/utils/images'; // Adjust the path as necessary
-import LinearGradient from 'react-native-linear-gradient';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import Search from '../../assets/svg/search.svg'
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, Image, TextInput, FlatList, TouchableOpacity } from 'react-native';
+
+import LinearGradient from 'react-native-linear-gradient';
+
+import Search from '../../assets/svg/search.svg';
 import { useNavigation } from '@react-navigation/native';
 import ScreenNameEnum from '../../routes/screenName.enum';
-const messages = [
-  { id: '1', name: 'Emelie', message: 'Sticker 😍', time: '23 min', unread: 1 },
-  { id: '2', name: 'Abigail', message: 'Typing..', time: '27 min', unread: 2 },
-  { id: '3', name: 'Elizabeth', message: 'Ok, see you then.', time: '33 min', unread: 0 },
-  { id: '4', name: 'Chloe', message: 'You: Hello how are you?', time: '55 min', unread: 0 },
-  { id: '5', name: 'Grace', message: 'You: Great I will write later..', time: '1 hour', unread: 0 },
-];
-
-const matches = [
-  { id: '1', image: image.bg },
-  { id: '2', image: image.bg },
-  { id: '3', image: image.bg },
-  { id: '4', image: image.bg },
-  { id: '5', image: image.bg },
-];
-
+import  firestore  from '@react-native-firebase/firestore';
 const Message = () => {
-  const navigation = useNavigation()
+  const navigation = useNavigation();
+  const [searchQuery, setSearchQuery] = useState('');
+  const [matches, setMatches] = useState([]);
+  const [messages, setMessages] = useState([]);
+
+  // Function to fetch matches and messages from Firestore
+  useEffect(() => {
+    const fetchMatches = async () => {
+      try {
+        const matchesSnapshot = await firestore().collection('matches').get();
+        const matchesData = matchesSnapshot.docs.map(doc => ({
+          id: doc.id,
+          image: doc.data().imageUrl // Assuming imageUrl is stored in Firestore
+        }));
+        setMatches(matchesData);
+      } catch (error) {
+        console.error('Error fetching matches:', error);
+      }
+    };
+
+    const fetchMessages = async () => {
+      try {
+        const messagesSnapshot = await firestore().collection('messages').get();
+        const messagesData = messagesSnapshot.docs.map(doc => ({
+          id: doc.id,
+          name: doc.data().name,
+          message: doc.data().message,
+          time: doc.data().time,
+          unread: doc.data().unread
+        }));
+        setMessages(messagesData);
+      } catch (error) {
+        console.error('Error fetching messages:', error);
+      }
+    };
+
+    fetchMatches();
+    fetchMessages();
+  }, []);
+
   return (
     <View style={styles.container}>
       <Text style={styles.headerText}>Message</Text>
       <View style={styles.searchInput}>
-<Search />
-      <TextInput  placeholder="Search" style={{marginLeft:10}} />
+        <Search />
+        <TextInput
+          placeholder="Search"
+          style={{ marginLeft: 10 }}
+          value={searchQuery}
+          onChangeText={text => setSearchQuery(text)}
+        />
       </View>
       <Text style={styles.sectionTitle}>New Matches</Text>
-      <View style={{height:hp(8),
-      }}>
-      <FlatList
-        horizontal
-        data={matches}
-        renderItem={({ item }) => (
-          <View style={[{borderWidth:2,borderColor:'#fff'},styles.matchImage]}>
-          <Image source={item.image}   resizeMode='contain' style={{height:50,width:50,borderRadius:25}}/>
-          <View  style={{height:8,width:8,borderRadius:4,
-           right:0,top:5,
-            backgroundColor:'#BFFF6F',position:'absolute',}} />
-          </View>
-        )}
-        keyExtractor={item => item.id}
-        showsHorizontalScrollIndicator={false}
-      />
+      <View style={{ height:80}}>
+        <FlatList
+          horizontal
+          data={matches}
+          renderItem={({ item }) => (
+            <TouchableOpacity
+              onPress={() => {
+                // Navigate to match details or chat screen
+                navigation.navigate(ScreenNameEnum.CHAT_SCREEN);
+              }}
+              style={[{ borderWidth: 2, borderColor: '#fff' }, styles.matchImage]}
+            >
+              <Image source={{ uri: item.image }} resizeMode="contain" style={{ height: 50, width: 50, borderRadius: 25 }} />
+              <View style={{ height: 8, width: 8, borderRadius: 4, right: 0, top: 5, backgroundColor: '#BFFF6F', position: 'absolute' }} />
+            </TouchableOpacity>
+          )}
+          keyExtractor={item => item.id}
+          showsHorizontalScrollIndicator={false}
+        />
       </View>
       <Text style={styles.sectionTitle}>Messages</Text>
       <FlatList
         data={messages}
         renderItem={({ item }) => (
-          <TouchableOpacity 
-          onPress={()=>{
-            navigation.navigate(ScreenNameEnum.CHAT_SCREEN)
-          }}
-          style={styles.messageItem}>
-            <Image source={image.bg} style={styles.userImage} />
+          <TouchableOpacity
+            onPress={() => {
+              // Navigate to chat screen with user details
+              navigation.navigate(ScreenNameEnum.CHAT_SCREEN, { userId: item.id }); // Pass userId or other details as needed
+            }}
+            style={styles.messageItem}
+          >
+            {/* Replace with actual user image from Firestore */}
+            <Image source={{ uri: 'https://example.com/userimage.jpg' }} style={styles.userImage} />
             <View style={styles.messageLeft}>
               <View>
                 <Text style={styles.userName}>{item.name}</Text>
                 <Text style={styles.userMessage}>{item.message}</Text>
               </View>
-              </View>
-              <View style={styles.messageRight}>
-                <Text style={styles.messageTime}>{item.time}</Text>
-                {item.unread > 0 && (
-         <LinearGradient
-         colors={['#BD0DF4', '#FA3EBA']} style={styles.unreadBadge}>
-                    <Text style={styles.unreadText}>{item.unread}</Text>
-                  </LinearGradient>
-                )}
-              </View>
-    
+            </View>
+            <View style={styles.messageRight}>
+              <Text style={styles.messageTime}>{item.time}</Text>
+              {item.unread > 0 && (
+                <LinearGradient colors={['#BD0DF4', '#FA3EBA']} style={styles.unreadBadge}>
+                  <Text style={styles.unreadText}>{item.unread}</Text>
+                </LinearGradient>
+              )}
+            </View>
           </TouchableOpacity>
         )}
         keyExtractor={item => item.id}
@@ -101,8 +135,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 20,
     paddingHorizontal: 15,
-   flexDirection:'row',
-   alignItems:'center',
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 20,
   },
   sectionTitle: {
@@ -114,7 +148,7 @@ const styles = StyleSheet.create({
   matchImage: {
     width: 55,
     height: 55,
-    borderRadius:27.5,
+    borderRadius: 27.5,
     marginRight: 10,
   },
   messageItem: {
@@ -126,7 +160,7 @@ const styles = StyleSheet.create({
   messageLeft: {
     flexDirection: 'row',
     alignItems: 'center',
-    width:'70%'
+    width: '70%',
   },
   userImage: {
     width: 50,

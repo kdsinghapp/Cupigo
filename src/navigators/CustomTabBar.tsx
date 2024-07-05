@@ -31,7 +31,7 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, navigat
             });
           };
 
-          const iconName = route.name === 'Subscription' ? image.Subscription : route.name === 'Profile' ? image.Profile : image.Message; 
+          const iconName = route.name === 'Subscription' ? image.Subscription : route.name === 'Profile' ? image.Profile :route.name === 'Message'?image.Message:image.find; 
 
           return (
             <TouchableOpacity
@@ -49,6 +49,7 @@ const CustomTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, navigat
             >
               <Image
                 source={iconName}
+              
                 style={[
                   styles.icon,
                   { tintColor: isFocused ? colors.backgroundColor : '#9E9E9E' },
@@ -101,7 +102,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffe4fa',
     borderRadius: 30,
     paddingHorizontal: 10,
-    paddingVertical: 5,
     marginHorizontal:10,
     height:50
   },
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     height: 24,
   },
   label: {
-    fontSize: 12,
+    fontSize:10,
     lineHeight: 15,
     fontWeight: '600',
     marginTop: 5,

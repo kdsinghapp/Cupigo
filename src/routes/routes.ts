@@ -17,6 +17,7 @@ import Askrelationship from "../screen/auth/Askrelationship";
 import Login from "../screen/auth/Login";
 import OtpScreen from "../screen/auth/OtpScreen";
 import SignupMethod from "../screen/auth/SignupMethod";
+import Findmatches from "../screen/bottomTab/Findmatches";
 import Subscription from "../screen/bottomTab/Subscription";
 import chat from "../screen/bottomTab/chat/chat";
 import chatPage from "../screen/bottomTab/chat/chatPage";
@@ -127,7 +128,7 @@ const _routes = {
       name: ScreenNameEnum.SUBSCRIPTION,
       Component:Subscription,
     },
-   
+
     
   ],
   
