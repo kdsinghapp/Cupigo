@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyAp2_w72iNotYneLUWkw0YD1XtHe07Rr4A</string>
+	<key>GCM_SENDER_ID</key>
+	<string>438738743028</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.cupigo.identifier</string>
+	<key>PROJECT_ID</key>
+	<string>cupigo</string>
+	<key>STORAGE_BUCKET</key>
+	<string>cupigo.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:438738743028:ios:183c89837022e2541cb8a1</string>
+	<key>DATABASE_URL</key>
+	<string>https://cupigo-default-rtdb.firebaseio.com</string>
+</dict>
+</plist>
