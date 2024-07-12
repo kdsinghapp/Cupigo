@@ -30,7 +30,10 @@ enum ScreenNameEnum {
   SETTINGS = 'SETTINGS',
   SUBSCRIPTION = 'SUBSCRIPTION',
   Chat_Contact='Chat_Contact',
-  Findmatches='Findmatches'
+  Findmatches='Findmatches',
+  Message ='Message',
+  ChangePassword='ChangePassword',
+  
 }
 
 export default ScreenNameEnum;

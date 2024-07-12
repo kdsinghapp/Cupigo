@@ -6,17 +6,17 @@ import { useNavigation } from '@react-navigation/native';
 import ScreenNameEnum from '../../routes/screenName.enum';
     
     const options = [
-      { id: '1', title: 'Biography' },
-      { id: '2', title: 'Change Password' },
-      { id: '3', title: 'Change Identifier' },
-      { id: '4', title: 'Distance' },
-      { id: '5', title: 'Privacy Policy' },
-      { id: '6', title: 'Rate Cupigo!' },
-      { id: '7', title: 'Contact Us' },
-      { id: '8', title: 'Subscription' },
-      { id: '9', title: 'General conditions of use' },
-      { id: '10', title: 'Setting' },
-      { id: '11', title: 'Log Out' },
+      { id: '1', title: 'Biography',screen:ScreenNameEnum.BIOGRAPHY },
+      // { id: '2', title: 'Change Password' ,screen:ScreenNameEnum.ChangePassword },
+      { id: '2', title: 'Change Identifier' },
+      { id: '3', title: 'Distance',screen:ScreenNameEnum.DISTANCE },
+      { id: '4', title: 'Privacy Policy', screen:ScreenNameEnum.PRIVACY_POLICY },
+      { id: '5', title: 'Rate Cupigo!' },
+      { id: '6', title: 'Contact Us', screen:ScreenNameEnum.CONTACT_US },
+      // { id: '8', title: 'Subscription' ,screen:ScreenNameEnum.SUBSCRIPTION},
+      { id: '7', title: 'General conditions of use',screen:ScreenNameEnum.GENERAL_CONDITIONS },
+      { id: '8', title: 'Setting',screen:ScreenNameEnum.SETTINGS },
+      { id: '9', title: 'Log Out' },
     ];
     
     const Profile = () => {
@@ -26,12 +26,16 @@ import ScreenNameEnum from '../../routes/screenName.enum';
           <Text style={styles.headerText}>Profile</Text>
           <ScrollView showsVerticalScrollIndicator={false}>
           <FlatList
+          
             data={options}
             renderItem={({ item }) => (
               <TouchableOpacity
               onPress={()=>{
                 if(item.title == 'Log Out'){
-                  navigation.navigate(ScreenNameEnum.SIGNUP_METHOD)
+                  navigation.navigate(ScreenNameEnum.SIGNUP_METHOD,)
+                }
+                else{
+                  navigation.navigate(item.screen,{profile:true})
                 }
               }}
               style={styles.optionItem}>
@@ -39,7 +43,7 @@ import ScreenNameEnum from '../../routes/screenName.enum';
                 <RightIcon height={35} /> 
               </TouchableOpacity>
             )}
-            keyExtractor={item => item.id}
+          
             showsVerticalScrollIndicator={false}
           />
 

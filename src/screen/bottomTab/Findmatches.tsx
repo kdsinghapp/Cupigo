@@ -5,15 +5,18 @@ import { image } from '../../configs/utils/images';
 import { useDispatch, useSelector } from 'react-redux';
 import { matchPersons } from '../../redux/feature/featuresSlice';
 import  firestore  from '@react-native-firebase/firestore';
+import { useNavigation } from '@react-navigation/native';
+import { Screen } from 'react-native-screens';
+import ScreenNameEnum from '../../routes/screenName.enum';
 export default function FindMatches() {
   const [modalVisible, setModalVisible] = useState(false);
   const animation = new Animated.Value(0);
 
   const findMatches = useSelector(state => state.feature.matchPersons);
-  const user = useSelector(state => state.feature.User);
+  const user = useSelector(state => state.auth.User);
 
   const dispatch = useDispatch();
-
+const navigation = useNavigation()
   useEffect(() => {
     let intervalId;
 
@@ -65,37 +68,47 @@ export default function FindMatches() {
   };
 
 
-  const saveUserToFirestore = async (matchedUser) => {
-    if (matchedUser) {
-      try {
-        const userDoc = await firestore().collection('matches').doc(user?.id).get();
-        if (userDoc.exists) {
-          const userContacts = userDoc.data().contacts || [];
-          if (!userContacts.some(contact => contact.id === matchedUser.id)) {
-            userContacts.push({
-              id: matchedUser.id,
-              userName: matchedUser.user_name,
-              userImage: matchedUser.image,
-            });
-            await firestore().collection('matches').doc(user?.id).update({
-              contacts: userContacts,
-            });
-          }
-        } else {
-          await firestore().collection('matches').doc(user?.id).set({
-            contacts: [{
-              id: matchedUser.id,
-              userName: matchedUser.user_name,
-              userImage: matchedUser.image,
-            }],
+
+  const saveUserToFirestore = async (user, matchedUser) => {
+    // Check if user and matchedUser are defined and have the necessary properties
+    if (!user || !user.id) {
+      console.error('User is undefined or invalid');
+      return;
+    }
+    if (!matchedUser || !matchedUser.id) {
+      console.error('MatchedUser is undefined or invalid');
+      return;
+    }
+  
+    try {
+      const userDoc = await firestore().collection('matches').doc(user.id).get();
+      if (userDoc.exists) {
+        const userContacts = userDoc.data().contacts || [];
+        if (!userContacts.some(contact => contact.id === matchedUser.id)) {
+          userContacts.push({
+            id: matchedUser.id || '', // Handle undefined id
+            userName: matchedUser.user_name || 'Unknown', // Handle undefined user_name
+            userImage: matchedUser.image || '', // Handle undefined image
+          });
+          await firestore().collection('matches').doc(user.id).update({
+            contacts: userContacts,
           });
         }
-      } catch (error) {
-        console.error('Error saving user to Firestore: ', error);
+      } else {
+        await firestore().collection('matches').doc(user.id).set({
+          contacts: [{
+            id: matchedUser.id || '', // Handle undefined id
+            userName: matchedUser.user_name || 'Unknown', // Handle undefined user_name
+            userImage: matchedUser.image || '', // Handle undefined image
+          }],
+        });
       }
+      console.log('User saved to Firestore successfully');
+      navigation.navigate(ScreenNameEnum.mess)
+    } catch (error) {
+      console.error('Error saving user to Firestore: ', error);
     }
   };
-
   return (
     <View style={styles.container}>
       <Header title='Find Matches' />
@@ -121,7 +134,7 @@ export default function FindMatches() {
             </Animated.View>
  {findMatches&&<TouchableOpacity 
  onPress={()=>{
-    saveUserToFirestore(matchPersons)
+    saveUserToFirestore(user,findMatches)
  }}
  style={{flexDirection:'row',alignItems:'center',backgroundColor:'pink',borderRadius:20,padding:5}}>
 

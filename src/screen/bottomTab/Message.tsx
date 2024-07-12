@@ -12,43 +12,29 @@ const Message = () => {
   const navigation = useNavigation();
   const [searchQuery, setSearchQuery] = useState('');
   const [matches, setMatches] = useState([]);
-  const [messages, setMessages] = useState([]);
 
-  // Function to fetch matches and messages from Firestore
   useEffect(() => {
     const fetchMatches = async () => {
       try {
         const matchesSnapshot = await firestore().collection('matches').get();
-        const matchesData = matchesSnapshot.docs.map(doc => ({
-          id: doc.id,
-          image: doc.data().imageUrl // Assuming imageUrl is stored in Firestore
-        }));
+        const matchesData = matchesSnapshot.docs.map(doc => {
+          const contacts = doc.data().contacts || [];
+          return contacts.map(contact => ({
+            id: contact.id,
+            image: contact.userImage, // Adjusted based on your Firestore field
+            name: contact.userName, // Adjusted based on your Firestore field
+          }));
+        }).flat(); // Flatten the array of arrays into a single array
         setMatches(matchesData);
+        console.log('matchesData',matchesData);
+        
       } catch (error) {
         console.error('Error fetching matches:', error);
       }
     };
 
-    const fetchMessages = async () => {
-      try {
-        const messagesSnapshot = await firestore().collection('messages').get();
-        const messagesData = messagesSnapshot.docs.map(doc => ({
-          id: doc.id,
-          name: doc.data().name,
-          message: doc.data().message,
-          time: doc.data().time,
-          unread: doc.data().unread
-        }));
-        setMessages(messagesData);
-      } catch (error) {
-        console.error('Error fetching messages:', error);
-      }
-    };
-
     fetchMatches();
-    fetchMessages();
   }, []);
-
   return (
     <View style={styles.container}>
       <Text style={styles.headerText}>Message</Text>
@@ -70,7 +56,7 @@ const Message = () => {
             <TouchableOpacity
               onPress={() => {
                 // Navigate to match details or chat screen
-                navigation.navigate(ScreenNameEnum.CHAT_SCREEN);
+                navigation.navigate(ScreenNameEnum.CHAT_SCREEN,{item:item});
               }}
               style={[{ borderWidth: 2, borderColor: '#fff' }, styles.matchImage]}
             >
@@ -84,17 +70,17 @@ const Message = () => {
       </View>
       <Text style={styles.sectionTitle}>Messages</Text>
       <FlatList
-        data={messages}
+        data={matches}
         renderItem={({ item }) => (
           <TouchableOpacity
             onPress={() => {
               // Navigate to chat screen with user details
-              navigation.navigate(ScreenNameEnum.CHAT_SCREEN, { userId: item.id }); // Pass userId or other details as needed
+              navigation.navigate(ScreenNameEnum.CHAT_SCREEN,{item:item}); // Pass userId or other details as needed
             }}
             style={styles.messageItem}
           >
             {/* Replace with actual user image from Firestore */}
-            <Image source={{ uri: 'https://example.com/userimage.jpg' }} style={styles.userImage} />
+            <Image source={{ uri:item.image  }} style={styles.userImage} />
             <View style={styles.messageLeft}>
               <View>
                 <Text style={styles.userName}>{item.name}</Text>

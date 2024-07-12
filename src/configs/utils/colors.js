@@ -5,5 +5,6 @@ export const colors={
     borderColor:'#EDECEE',
     cardColor:'#FA3EBA',
     btnColor:'#4D005A',
-    white:'#fff'
+    white:'#fff',
+    backgroundColorLight:'#ffe4fa'    
 }

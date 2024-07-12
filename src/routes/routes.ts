@@ -18,10 +18,12 @@ import Login from "../screen/auth/Login";
 import OtpScreen from "../screen/auth/OtpScreen";
 import SignupMethod from "../screen/auth/SignupMethod";
 import Findmatches from "../screen/bottomTab/Findmatches";
+import Message from "../screen/bottomTab/Message";
 import Subscription from "../screen/bottomTab/Subscription";
 import chat from "../screen/bottomTab/chat/chat";
 import chatPage from "../screen/bottomTab/chat/chatPage";
 import Biography from "../screen/profilesection/Biography";
+import ChangePassword from "../screen/profilesection/ChangePassword";
 import Distance from "../screen/profilesection/Distance";
 import GeneralCondions from "../screen/profilesection/GeneralCondions";
 import changeIdentifier from "../screen/profilesection/changeIdentifier";
@@ -128,6 +130,16 @@ const _routes = {
       name: ScreenNameEnum.SUBSCRIPTION,
       Component:Subscription,
     },
+    {
+      name: ScreenNameEnum.Message,
+      Component:Message,
+    },
+   
+    {
+      name: ScreenNameEnum.ChangePassword,
+      Component:ChangePassword,
+    },
+   
 
     
   ],

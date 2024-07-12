@@ -34,6 +34,13 @@ export const image = {
    Profile: require('../../assets/croping/Profile.png'),
    find: require('../../assets/croping/Logo.png'),
    radar: require('../../assets/croping/radar.png'),
+   contact: require('../../assets/croping/rafiki3x.png'),
+   lock: require('../../assets/croping/Lock2x.png'),
+   eye: require('../../assets/croping/Hide.png'),
+   img: require('../../assets/croping/img.png'),
+   img1: require('../../assets/croping/img1.png'),
+   img2: require('../../assets/croping/img2.png'),
+   genral: require('../../assets/croping/genral.png'),
 
 
 

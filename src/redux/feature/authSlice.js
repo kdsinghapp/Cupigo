@@ -14,13 +14,14 @@ const initialState = {
   isLogin: false,
   isLogOut: false,
   User: [],
-  Question: []
+  Question: [],
+  user_profile:[]
 };
 
 export const login = createAsyncThunk(
   'login',
   async (params, thunkApi) => {
-    console.log('🚀 Login_phone:', params);
+    console.log('🚀 Login_phone:', params.data);
     console.log('login=>>>>>>>>', params.data);
     try {
       let data = new FormData();
@@ -30,6 +31,7 @@ export const login = createAsyncThunk(
       const response = await API.post('/Login', data, {
         headers: {
           'Content-Type': 'multipart/form-data',
+          Accept:'application/json'
         },
       });
 
@@ -143,6 +145,69 @@ export const submit_answers = createAsyncThunk(
     }
   },
 );
+export const get_profile = createAsyncThunk(
+  'get_profile',
+  async (params, thunkApi) => {
+    try {
+
+      
+
+      let data = new FormData();
+      data.append('user_id', params.user_id);
+     
+
+
+
+      const response = await API.post('/get-profile', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Accept:'application/json'
+        },
+      });
+
+      console.log('get_profile response:', response.data);
+
+      if (response.data.status == '1') {
+    
+      } else {
+        errorToast(response.data.message || 'Unknown error occurred');
+      }
+
+      return response.data;
+    } catch (error) {
+      console.error('get_profile error:', error);
+      errorToast('Network error');
+      return thunkApi.rejectWithValue(error);
+    }
+  },
+);
+export const update_profile = createAsyncThunk(
+  'update_profile',
+  async (params, thunkApi) => {
+    try {
+
+      const response = await API.post('/update-profile', params, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Accept:'application/json'
+        },
+      });
+
+
+      if (response.data.status == '1') {
+        console.log('update_profile response:', response.data?.result);
+      } else {
+        errorToast(response.data.message || 'Unknown error occurred');
+      }
+
+      return response.data;
+    } catch (error) {
+      console.error('update_profile error:', error);
+      errorToast('Network error');
+      return thunkApi.rejectWithValue(error);
+    }
+  },
+);
 
 
 export const get_quesctions = createAsyncThunk(
@@ -206,6 +271,22 @@ const AuthSlice = createSlice({
       state.isSuccess = false;
       state.isLogin = false;
     });
+    builder.addCase(get_profile.pending, state => {
+      state.isLoading = true;
+    });
+    builder.addCase(get_profile.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.isSuccess = true;
+      state.isError = false;
+state.user_profile=action.payload
+
+    });
+    builder.addCase(get_profile.rejected, (state, action) => {
+      state.isLoading = false;
+      state.isError = true;
+      state.isSuccess = false;
+      state.isLogin = false;
+    });
     builder.addCase(login_with_otp.pending, state => {
       state.isLoading = true;
     });
@@ -252,6 +333,23 @@ const AuthSlice = createSlice({
 
     });
     builder.addCase(submit_answers.rejected, (state, action) => {
+      state.isLoading = false;
+      state.isError = true;
+      state.isSuccess = false;
+      state.isLogin = false;
+    });
+    builder.addCase(update_profile.pending, state => {
+      state.isLoading = true;
+    });
+    builder.addCase(update_profile.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.isSuccess = true;
+      state.isError = false;
+      state.isLogOut = false;
+    
+
+    });
+    builder.addCase(update_profile.rejected, (state, action) => {
       state.isLoading = false;
       state.isError = true;
       state.isSuccess = false;

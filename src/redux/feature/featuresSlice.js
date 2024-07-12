@@ -13,7 +13,8 @@ const initialState = {
   isSuccess: false,
   SubscriptionPlan: null,
   PayMentStatus:null,
-  matchPersons:[]
+  matchPersons:[],
+  privacy_policy:[]
  
 
 };
@@ -35,6 +36,29 @@ export const get_Plans = createAsyncThunk(
       return response.data.result;
     } catch (error) {
       console.log('Error: get_Plans ', error);
+
+      return thunkApi.rejectWithValue(error);
+    }
+  },
+);
+export const get_privacy_policy = createAsyncThunk(
+  'get_privacy_policy',
+  async (params, thunkApi) => {
+    try {
+      const response = await API.get('/get-privacy-policy');
+
+      if (response.data.status == '1') {
+        console.log('get_privacy_policy Success', response.data.message);
+      } else {
+        console.log(
+          'get_privacy_policy Not Found',
+       
+        );
+      }
+
+      return response.data.result;
+    } catch (error) {
+      console.log('Error: get_privacy_policy ', error);
 
       return thunkApi.rejectWithValue(error);
     }
@@ -169,6 +193,39 @@ export const matchPersons = createAsyncThunk(
     }
   },
 );
+export const add_support_inquiries = createAsyncThunk(
+  'add_support_inquiries',
+  async (params, thunkApi) => {
+    try {
+      let data = new FormData();
+      data.append('user_id',params.user_id);
+      data.append('message', params.message);
+
+      const response = await API.post('/add_support_inquiries', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      
+
+      if (response.data.status == '1') {
+        
+     
+ successToast('support inquiry send successfuly');
+
+      } else {
+        errorToast(response.data.message || 'Unknown error occurred');
+      }
+
+      return response.data?.result;
+    } catch (error) {
+      console.log('🚀 ~ file: AuthSlice.js:16 ~ login ~ error:', error);
+      errorToast('Network error');
+      return thunkApi.rejectWithValue(error);
+    }
+  },
+);
 
 const FeatureSlice = createSlice({
   name: 'featureSlice',
@@ -187,6 +244,35 @@ const FeatureSlice = createSlice({
       state.PayMentStatus = action.payload;
     });
     builder.addCase(Payment_api.rejected, (state, action) => {
+      state.isLoading = false;
+      state.isError = true;
+      state.isSuccess = false;
+    });
+    builder.addCase(get_privacy_policy.pending, state => {
+      state.isLoading = true;
+    });
+    builder.addCase(get_privacy_policy.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.isSuccess = true;
+      state.isError = false;
+      state.privacy_policy = action.payload;
+    });
+    builder.addCase(get_privacy_policy.rejected, (state, action) => {
+      state.isLoading = false;
+      state.isError = true;
+      state.isSuccess = false;
+    });
+   
+    builder.addCase(add_support_inquiries.pending, state => {
+      state.isLoading = true;
+    });
+    builder.addCase(add_support_inquiries.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.isSuccess = true;
+      state.isError = false;
+  
+    });
+    builder.addCase(add_support_inquiries.rejected, (state, action) => {
       state.isLoading = false;
       state.isError = true;
       state.isSuccess = false;

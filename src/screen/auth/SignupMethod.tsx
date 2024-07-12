@@ -6,9 +6,43 @@ import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-nat
 import { useNavigation } from '@react-navigation/native';
 import ScreenNameEnum from '../../routes/screenName.enum';
 
-const SignupMethod = ({  }) => {
+import auth from '@react-native-firebase/auth';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { useDispatch } from 'react-redux';
+import { loginSuccess } from '../../redux/feature/authSlice';
+import { errorToast } from '../../configs/customToast';
 
-  const navigation = useNavigation()
+
+const SignupMethod = ({  }) => {
+  
+   const dispatch = useDispatch();
+   const navigation = useNavigation();
+
+   async function onGoogleButtonPress() {
+    errorToast('this feature is currently under maintenance')
+  //   try {
+  //     // Check if your device supports Google Play
+  //     await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+  //     // Get the users ID token
+  //     const { idToken } = await GoogleSignin.signIn();
+      
+  //     // Create a Google credential with the token
+  //     const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+      
+  //     // Sign-in the user with the credential
+  //     const userCredential = await auth().signInWithCredential(googleCredential);
+
+  //     // Dispatch action to update Redux state
+  //     dispatch(loginSuccess(true));
+
+  //     // Navigate to your bottom tab screen
+  //     navigation.navigate(ScreenNameEnum.BOTTOM_TAB); // Replace with your bottom tab screen name
+  //   } catch (error) {
+  //     console.error('Google sign in error:', error);
+  //     // Handle error if necessary
+  //   }
+  }
+
   return (
     <View style={styles.container}>
       <StatusBar barStyle="light-content" />
@@ -31,11 +65,13 @@ const SignupMethod = ({  }) => {
             borderRadius: 10, height: hp(50), width: wp(90), padding: 20
           }}>
           <Text style={styles.welcomeText}>Hello, <Text style={[styles.welcomeText, { fontWeight: '500' }]}>Welcome</Text> </Text>
-          <TouchableOpacity style={[styles.button, { marginTop: 50 }]} onPress={() => { }}>
+          <TouchableOpacity style={[styles.button, { marginTop: 50 }]} onPress={() => {errorToast('this feature is currently under maintenance') }}>
             <Image source={image.F_icon} style={{ height: 30, width: 30 }} />
             <Text style={styles.buttonText}>Sign with Facebook</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={() => { }}>
+          <TouchableOpacity 
+           onPress={() => onGoogleButtonPress().then(() => console.log('Signed in with Google!'))}
+          style={styles.button} >
             <Image source={image.G_icon} style={{ height: 30, width: 30 }} />
             <Text style={styles.buttonText}>Sign with Google</Text>
           </TouchableOpacity>

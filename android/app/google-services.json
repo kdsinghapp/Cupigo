@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "438738743028",
+    "firebase_url": "https://cupigo-default-rtdb.firebaseio.com",
     "project_id": "cupigo",
     "storage_bucket": "cupigo.appspot.com"
   },
@@ -12,7 +13,12 @@
           "package_name": "com.cupigo"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "438738743028-fr1s2rrijn8qos6cnsqtkfm7q8dp6ttq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyARKsgV7oB8ybGj_aTVaa8sKEpFgo8uHVo"
@@ -20,7 +26,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "438738743028-fr1s2rrijn8qos6cnsqtkfm7q8dp6ttq.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "438738743028-q0p6d0ncjjtafhf9r8bm1sma1lf3tr5u.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.cupigo.identifier"
+              }
+            }
+          ]
         }
       }
     }

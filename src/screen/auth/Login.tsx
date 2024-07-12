@@ -27,7 +27,7 @@ export default function Login() {
   const send_otp = () => {
     const params = {
       data: {
-        country_code: countryCode?.replace('+', ''),
+        country_code: countryCode,
         mobile: phoneNumber,
       },
       navigation: navigation,

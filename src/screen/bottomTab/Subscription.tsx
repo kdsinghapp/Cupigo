@@ -76,25 +76,42 @@ export default function Subscription() {
   };
 
   const handleNavigationStateChange = async (navState) => {
-    console.log('navState.url',navState.url);
-    
-    if (navState.url.includes('success-stripe')) {
-      setCheckoutUrl(false);
-      const response = await fetch(navState.url);
-      const result = await response.json();
-console.log('result?.data?.payment_intent',result?.data?.payment_intent);
-
-      if (result?.data?.payment_intent) {
-
-        purchase_subscription(result?.data?.payment_intent);
+    try {
+      const currentUrl = navState.url;
+      console.log('Current URL:', currentUrl);
+  
+      // Trim and clean the URL
+      const cleanUrl = currentUrl.trim();
+  
+      if (cleanUrl.includes('handle-checkout-success')) {
+        console.log('Success URL detected.');
+        setCheckoutUrl(false);
+  
+        try {
+          const response = await fetch(cleanUrl);
+          const result = await response.json();
+  
+          console.log('Fetch response:', result);
+  
+          if (result?.session?.payment_intent) {
+            console.log('Payment Intent:', result.session.payment_intent);
+            purchase_subscription(result.session.payment_intent);
+          } else {
+            console.log('Error: Payment intent not found in response', result);
+          }
+        } catch (fetchError) {
+          console.error('Error fetching payment intent:', fetchError);
+        }
+      } else if (cleanUrl.includes('cancel-stripe')) {
+        console.log('Cancel URL detected.');
+        setCheckoutUrl(false);
       }
-      else {
-        console.log('Error', 'result?.data?.payment_intent', checkoutUrl);
-      }
-    } else if (navState.url.includes('cancel-stripe')) {
-      setCheckoutUrl(false);
+    } catch (error) {
+      console.error('Error handling navigation state change:', error);
     }
   };
+  
+  
 
   const purchase_subscription = async (intent) => {
 
@@ -188,7 +205,7 @@ console.log('result?.data?.payment_intent',result?.data?.payment_intent);
 const styles = StyleSheet.create({
   webView:{
 
-
+flex:1
   },
   container: {
     flex: 1,
